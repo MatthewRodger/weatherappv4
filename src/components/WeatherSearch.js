@@ -1,11 +1,12 @@
 import React, {useState} from "react";
 import TextField from '@material-ui/core/TextField';
 import AppBar from "@material-ui/core/AppBar";
-import { Typography, ListItemText, Button, CardContent } from "@material-ui/core";
+import { Typography, ListItemText, IconButton, CardContent } from "@material-ui/core";
 import List from '@material-ui/core/List';
 import axios from "axios";
 import Card from "@material-ui/core/Card";
 import { makeStyles } from '@material-ui/core/styles';
+import searchGlass from "./pngs/icons8-search-64.png";
 
 
 function WeatherSearch() {
@@ -15,31 +16,55 @@ function WeatherSearch() {
     function search() {
         const apikey = "ba9faead36419b05538747acf541515b";
         const city = searchedcity;
-        const url = "http://api.openweathermap.org/data/2.5/weather?q=" + city + ",uk&APPID=" + apikey;
+        const url = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=" + apikey;
         axios.get(url)
             .then(res => {
                 setweatherdata(res.data);
             })
     }
 
+    function capital_letter(str) 
+    {
+        str = str.split(" ");
+
+        for (var i = 0, x = str.length; i < x; i++) {
+            str[i] = str[i][0].toUpperCase() + str[i].substr(1);
+    }
+
+    return str.join(" ");
+}
+
+
 
     const useStyles = makeStyles({
         card: {
 
-            minWidth: 150,
-            background:'linear-gradient(180deg, lightyellow 1%, lightblue 90%)',
-            margin: "100px",
-            flexGrow: 1
+            display: "",
+            minWidth: "10px",
+            minHeight: "10px",
+            maxWidth: "400px",
+            margin: "50px",
+            
         },
         textfield: {
             margin: "10px",
+            display:"block",
+           
+           
             
         },
+        tempurature:{
+
+        },
         searchButton: {
+            display:"block",
             
         },
         Icon:{
-            margin: "10px",
+        
+        },
+        Info:{
+            
         }
         
       });
@@ -50,13 +75,18 @@ function WeatherSearch() {
 
     var displayedList = "";
     var displayedIcon = "";
+    var displayedTemp = "";
+    
     if( (weatherdata.name !== undefined) && (searchedcity !== undefined) ) {
+        displayedTemp = <List className = "tempurature">
+                            <ListItemText fontSize = "30" primary = {Math.round(weatherdata.main.temp -273.15) + "°C"}  />
+                        </List>
         displayedList = <List  >
-                            <ListItemText primary = {" Weather in "+ weatherdata.name +", "+ weatherdata.sys.country + ":"} />
-                            <ListItemText primary = {weatherdata.weather[0].description} />
-                            <ListItemText primary = {"temp: " + Math.round(weatherdata.main.temp -273.15) + "°C"}  />
-                            <ListItemText primary = {"humidity: "+ weatherdata.main.humidity +"%" }/>
-                            <ListItemText primary = {"Wind speed: " + weatherdata.wind.speed + "  Bearing: " + weatherdata.wind.deg + "°" }/>
+                            <ListItemText primary = {" Weather in "+ weatherdata.name +", "+ weatherdata.sys.country + ":"}/>
+                            <ListItemText primary = {capital_letter(weatherdata.weather[0].description)} />
+                            {/* <ListItemText primary = {"Tempurature: " + Math.round(weatherdata.main.temp -273.15) + "°C"}  /> */}
+                            <ListItemText primary = {"Humidity: "+ weatherdata.main.humidity +"%" }/>
+                            <ListItemText primary = {"Wind Speed: " + weatherdata.wind.speed + ",  Bearing: " + weatherdata.wind.deg + "°" }/>
                         </List> 
         
        
@@ -127,7 +157,7 @@ function WeatherSearch() {
                             className = {classes.textfield}
                             top = "50%"
                             id="textinput"
-                            label="Search A City"
+                            label = "Search A City"
                             variant="outlined"
                             defaultValue = {searchedcity}
                             onChange= {event => {
@@ -135,21 +165,19 @@ function WeatherSearch() {
                                 setsearchedcity(value)
                             }}
                         />
-                        <Button  
+                        <IconButton  
                             classname ={classes.searchButton}
                             onClick={() => search()}
-                            variant="contained" 
-                            color="primary"
-                        
-                            
+                            aria-label="Search Weather"      
                         > 
-                         Seach Weather
-                        </Button> 
+                            <img src = {searchGlass} alt = ""/>
+                        </IconButton> 
                     </CardContent> 
                     
                     <CardContent className={classes.Icon} >
                         
                         <img src={displayedIcon} alt = ""/>
+                        {displayedTemp}
 
                     </CardContent>
                        
