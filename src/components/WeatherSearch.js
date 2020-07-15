@@ -23,54 +23,91 @@ function WeatherSearch() {
     }
 
 
-
     const useStyles = makeStyles({
         card: {
+
             minWidth: 150,
-            background:'linear-gradient(0deg, lightgreen 1%, lightblue 90%)',
-            margin: "10px",
+            background:'linear-gradient(180deg, lightyellow 1%, lightblue 90%)',
+            margin: "100px",
+            flexGrow: 1
         },
         textfield: {
             margin: "10px",
             
         },
         searchButton: {
-            margin : "50px", //this doesnt appear to be working for the button
+            
+        },
+        Icon:{
+            margin: "10px",
         }
+        
       });
       const classes = useStyles()
 
     
 
-    function windDirection(deg) {
-        const bearing = deg;
-        switch (bearing){
-            case (315 <= bearing || bearing <= 45):
-                return "North";
-                
-            case (45 < bearing && bearing < 135):
-                return "East";
-                
-            case (135 <= bearing && bearing <= 225):
-                return "South";    
-
-            case (225 < bearing && bearing < 315):
-                return "West";
-
-            default:
-                return "unknown compass direction";
-            
-        }
-    }
 
     var displayedList = "";
+    var displayedIcon = "";
     if( (weatherdata.name !== undefined) && (searchedcity !== undefined) ) {
-        displayedList = <List>
-                            Weather in {weatherdata.name}:
+        displayedList = <List  >
+                            <ListItemText primary = {" Weather in "+ weatherdata.name +", "+ weatherdata.sys.country + ":"} />
+                            <ListItemText primary = {weatherdata.weather[0].description} />
                             <ListItemText primary = {"temp: " + Math.round(weatherdata.main.temp -273.15) + "°C"}  />
                             <ListItemText primary = {"humidity: "+ weatherdata.main.humidity +"%" }/>
-                            <ListItemText primary = {"Wind speed: " + weatherdata.wind.speed + "  Bearing: " + weatherdata.wind.deg + "° (" + windDirection(weatherdata.wind.deg) + ")"}/>
+                            <ListItemText primary = {"Wind speed: " + weatherdata.wind.speed + "  Bearing: " + weatherdata.wind.deg + "°" }/>
                         </List> 
+        
+       
+       
+        switch(weatherdata.weather[0].icon) {
+            case("01d"):{
+                displayedIcon = "http://openweathermap.org/img/wn/01d@2x.png"
+                break;
+            }
+
+            case("02d"):{
+               displayedIcon = "http://openweathermap.org/img/wn/02d@2x.png"
+               break;
+            }
+
+            case("03d"):{
+                displayedIcon = "http://openweathermap.org/img/wn/03d@2x.png"
+                break;
+             }
+
+            case("04d"):{
+                displayedIcon = "http://openweathermap.org/img/wn/04d@2x.png"
+                break;
+            }
+            case("09d"):{
+                displayedIcon = "http://openweathermap.org/img/wn/04d@2x.png"
+                break;
+            }
+            case("10d"):{
+                displayedIcon = "http://openweathermap.org/img/wn/04d@2x.png"
+                break;
+            }
+            case("11d"):{
+                displayedIcon = "http://openweathermap.org/img/wn/04d@2x.png"
+                break;
+            }
+            case("12d"):{
+                displayedIcon = "http://openweathermap.org/img/wn/04d@2x.png"
+                break;
+            }
+            case("50d"):{
+                displayedIcon = "http://openweathermap.org/img/wn/04d@2x.png"
+                break;
+            }
+
+            default:{
+                displayedIcon = "http://openweathermap.org/img/wn/10d@2x.png"
+            }
+
+           
+        }
     }
 
 
@@ -106,10 +143,21 @@ function WeatherSearch() {
                         
                             
                         > 
-                        Seach Weather
-                        </Button>  
+                         Seach Weather
+                        </Button> 
+                    </CardContent> 
+                    
+                    <CardContent className={classes.Icon} >
+                        
+                        <img src={displayedIcon} alt = ""/>
+
+                    </CardContent>
+                       
+                    <CardContent className={classes.Info} >
                         {displayedList} 
-                    </CardContent>  
+                    </CardContent>
+                        
+                     
                 </Card>       
                 
             </div>
