@@ -53,15 +53,15 @@ function WeatherSearch() {
            
             
         },
-        tempurature:{
-
-        },
         searchButton: {
             display:"block",
             
         },
         Icon:{
         
+        },
+        tempMain:{
+
         },
         Info:{
             
@@ -78,13 +78,19 @@ function WeatherSearch() {
     var displayedTemp = "";
     
     if( (weatherdata.name !== undefined) && (searchedcity !== undefined) ) {
-        displayedTemp = <List className = "tempurature">
-                            <ListItemText fontSize = "30" primary = {Math.round(weatherdata.main.temp -273.15) + "°C"}  />
-                        </List>
+        displayedTemp = <div className = {classes.tempMain}>
+                        
+                            <Typography variant = "h3">
+                                {Math.round(weatherdata.main.temp -273.15) + "°C"}
+                                
+                            </Typography>
+                            
+                            <Typography variant = "h6">
+                                {capital_letter(weatherdata.weather[0].description)}
+                            </Typography>
+                        </div>
         displayedList = <List  >
                             <ListItemText primary = {" Weather in "+ weatherdata.name +", "+ weatherdata.sys.country + ":"}/>
-                            <ListItemText primary = {capital_letter(weatherdata.weather[0].description)} />
-                            {/* <ListItemText primary = {"Tempurature: " + Math.round(weatherdata.main.temp -273.15) + "°C"}  /> */}
                             <ListItemText primary = {"Humidity: "+ weatherdata.main.humidity +"%" }/>
                             <ListItemText primary = {"Wind Speed: " + weatherdata.wind.speed + ",  Bearing: " + weatherdata.wind.deg + "°" }/>
                         </List> 
