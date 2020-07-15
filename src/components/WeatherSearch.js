@@ -48,10 +48,7 @@ function WeatherSearch() {
         },
         textfield: {
             margin: "10px",
-            display:"block",
            
-           
-            
         },
         searchButton: {
             display:"block",
