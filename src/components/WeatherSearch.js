@@ -23,6 +23,13 @@ function WeatherSearch() {
             })
     }
 
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+          search();
+        }
+    }
+
+
     function capital_letter(str) 
     {
         str = str.split(" ");
@@ -162,11 +169,11 @@ function WeatherSearch() {
                             id="textinput"
                             label = "Search A City"
                             variant="outlined"
-                            defaultValue = {searchedcity}
                             onChange= {event => {
                                 const { value } = event.target;
                                 setsearchedcity(value)
                             }}
+                          onKeyDown={handleKeyDown}
                         />
                         <IconButton  
                             classname ={classes.searchButton}
