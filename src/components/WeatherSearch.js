@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import TextField from '@material-ui/core/TextField';
 import AppBar from "@material-ui/core/AppBar";
-import { Typography, ListItemText, IconButton, CardContent } from "@material-ui/core";
+import { Typography, ListItemText, IconButton,Button, CardContent } from "@material-ui/core";
 import List from '@material-ui/core/List';
 import axios from "axios";
 import Card from "@material-ui/core/Card";
@@ -69,6 +69,9 @@ function WeatherSearch() {
         },
         Info:{
             
+        },
+        SignInForm:{
+            margin: "12px",
         }
         
       });
@@ -196,7 +199,22 @@ function WeatherSearch() {
                     </CardContent>
                         
                      
-                </Card>       
+                </Card>   
+                <Card className = {classes.card}>
+                    <CardContent>
+                    <form className={classes.SignInForm} noValidate autoComplete="off">
+                        <TextField id="standard-basic" label="Username" />
+                        {/* do mongodb/ microservice stuff */}
+                        <TextField id="standard-basic" label="Home City"/>
+                        
+                    </form>
+                        <Button variant="contained" color="primary"
+                           
+                        >
+                            Save Preferences   
+                        </Button> 
+                    </CardContent>
+                </Card>    
                 
             </div>
         </div>

@@ -1,11 +1,11 @@
 import React from "react";
 import "./App.css"
-import UserForm from "./components/WeatherSearch";
+import WeatherSearch from "./components/WeatherSearch";
 
 function App() {
   return (
     <div className= "App">
-      <UserForm />
+      <WeatherSearch />
     </div>
   )
 }
