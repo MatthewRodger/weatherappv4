@@ -7,11 +7,18 @@ import axios from "axios";
 import Card from "@material-ui/core/Card";
 import { makeStyles } from '@material-ui/core/styles';
 import searchGlass from "./pngs/icons8-search-64.png";
-
+import DBService from "./DBService";
 
 function WeatherSearch() {
     const [weatherdata, setweatherdata] = useState({});
     const [searchedcity, setsearchedcity] = useState("");
+    
+    
+    var [object, setObject] = useState({username: "", locationpref: "", dob: ""});
+    
+    var dbHandler = new DBService();
+
+
 
     function search() {
         const apikey = "ba9faead36419b05538747acf541515b";
@@ -23,6 +30,10 @@ function WeatherSearch() {
             })
     }
 
+    function saveprefs() {
+        
+    }
+    
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
           search();
@@ -203,13 +214,32 @@ function WeatherSearch() {
                 <Card className = {classes.card}>
                     <CardContent>
                     <form className={classes.SignInForm} noValidate autoComplete="off">
-                        <TextField id="standard-basic" label="Username" />
-                        {/* do mongodb/ microservice stuff */}
-                        <TextField id="standard-basic" label="Home City"/>
+                        <TextField id="standard-basic" label="Username" 
+                                onChange= {event => {
+                                    const { value } = event.target;
+                                    setObject({username: value})
+                                }}
+                            />
+                        
+                       
+                        <TextField id="standard-basic" label="Home City"
+                            onChange= {event => {
+                                const { value } = event.target;
+                                setObject({locationpref: value})
+                            }}
+                        />
+                        
+                        <TextField id="standard-basic" label="date of birth"
+                            onChange= {event => {
+                                const { value } = event.target;
+                                setObject({dob: value})
+                            }}
+                        />
+                        
                         
                     </form>
                         <Button variant="contained" color="primary"
-                           
+                           onClick={() => saveprefs()}
                         >
                             Save Preferences   
                         </Button> 

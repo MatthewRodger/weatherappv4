@@ -1,33 +1,28 @@
-var MongoClient = require('mongodb').MongoClient;
 
-const url = "mongodb://localhost:27017/mydb";
-const dbName = "WeatherApp";
-const dbCollection = "Users";
+const User = require("./schema/userModel.js");
+const db = "mongodb://localhost:27017/mydb";
 
-MongoClient.connect(url, function(err, db) {
-    if (err) throw err;
-    const dbo = db.db(dbName);
-});
+class DBService {
+    constructor(){
+        const mongoose = require('mongoose');
+        mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true });  
+    }
 
-//public, maybe do some error detecting here
-function dbPost(inUserName, inLocation, inDob){
-    var obj = {username: inUserName,
-            locationpref: inLocation,
-            dob: inDob}
-    
-        actualdbPost(obj);
+
+
+    getUser(){
+        User.find({}, function(err, result){
+            if(err){
+                console.log("there was error")
+            } else {
+                return(result);
+            }
+        })
+        
+    }
+
 }
 
-//private
-function actualdbPost(object){
-    dbo.collection(dbCollection).insertOne(object)
-}
+export default DBService;
 
-
-function getUserByUsername(inUsername) {
-    dbo.collection(dbCollection).find({username: "matt"}).toArray(function(err, result) {
-        if (err) throw err;
-        return(result);
-      });
-}
 
