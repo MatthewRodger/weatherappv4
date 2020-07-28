@@ -7,7 +7,6 @@ import axios from "axios";
 import Card from "@material-ui/core/Card";
 import { makeStyles } from '@material-ui/core/styles';
 import searchGlass from "./pngs/icons8-search-64.png";
-import DBService from "./DBService";
 
 function WeatherSearch() {
     const [weatherdata, setweatherdata] = useState({});
@@ -15,10 +14,6 @@ function WeatherSearch() {
     
     
     var [object, setObject] = useState({username: "", locationpref: "", dob: ""});
-    
-    var dbHandler = new DBService();
-
-
 
     function search() {
         const apikey = "ba9faead36419b05538747acf541515b";
