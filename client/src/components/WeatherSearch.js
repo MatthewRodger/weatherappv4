@@ -224,13 +224,6 @@ function WeatherSearch() {
                             }}
                         />
                         
-                        <TextField id="standard-basic" label="date of birth"
-                            onChange= {event => {
-                                const { value } = event.target;
-                                setObject({dob: value})
-                            }}
-                        />
-                        
                         
                     </form>
                         <Button variant="contained" color="primary"

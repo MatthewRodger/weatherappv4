@@ -21,7 +21,6 @@ router.post("/", async (req, res) =>{
      const user =  new User({
         username: req.body.username,
         locationPref: req.body.locationPref,
-        dob: req.body.dob
     })
 
     try{
