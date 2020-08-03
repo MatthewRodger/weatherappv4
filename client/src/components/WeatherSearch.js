@@ -12,8 +12,8 @@ function WeatherSearch() {
     const [weatherdata, setweatherdata] = useState({});
     const [searchedcity, setsearchedcity] = useState("");
     
-    
-    var [object, setObject] = useState({username: "", locationpref: "", dob: ""});
+    //check when this is updated, its overwritting the whole thing not each field
+    var [object, setObject] = useState({username: "", locationPref: ""});
 
     function search() {
         const apikey = "ba9faead36419b05538747acf541515b";
@@ -25,7 +25,24 @@ function WeatherSearch() {
             })
     }
 
-    function saveprefs() {
+    async function saveprefs() {
+        const config ={
+            headers: {
+                "Content-Type" : "application/json",
+                "Access-Control-Allow-Origin" : "*"
+            }
+            
+        }
+
+        try{
+            var res = await axios.post("/users",{
+                "username" : object.username,
+                "locationPref" : object.locationPref
+            },config)
+        } catch (err) {
+            console.log("response = "+ res + "there was error")
+        }
+        
         
     }
     
@@ -159,9 +176,7 @@ function WeatherSearch() {
         }
     }
 
-
     return (
-       
         <div className="WeatherSearch">
             <div>
                 <AppBar position="static">
@@ -169,7 +184,6 @@ function WeatherSearch() {
                         Weather App
                     </Typography>
                 </AppBar>
-                
                 <Card className={classes.card} variant="filled">
                     <CardContent>
                         <TextField 
@@ -212,7 +226,11 @@ function WeatherSearch() {
                         <TextField id="standard-basic" label="Username" 
                                 onChange= {event => {
                                     const { value } = event.target;
-                                    setObject({username: value})
+                                    setObject(prevState => {
+                                        let object = Object.assign({}, prevState.object);
+                                        object.username = value;
+                                        return {object};
+                                    })
                                 }}
                             />
                         
@@ -220,16 +238,20 @@ function WeatherSearch() {
                         <TextField id="standard-basic" label="Home City"
                             onChange= {event => {
                                 const { value } = event.target;
-                                setObject({locationpref: value})
+                                setObject(prevState => {
+                                    let object = Object.assign({}, prevState.object);
+                                    object.locationPref = value;
+                                    return {object};
+                                })
                             }}
                         />
                         
                         
                     </form>
                         <Button variant="contained" color="primary"
-                           onClick={() => saveprefs()}
+                           onClick={() => {saveprefs()}}
                         >
-                            Save Preferences   
+                            Save Preferences
                         </Button> 
                     </CardContent>
                 </Card>    
