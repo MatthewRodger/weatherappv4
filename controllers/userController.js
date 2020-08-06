@@ -13,9 +13,7 @@ exports.addUser = async (req, res, next) => {
     } catch (err) {
         // CHECK HTTP RESPONSE ERROR CODE 
         if (err.name === "ValidationError") {
-            console.log("val error");
             const messages = Object.values(err.errors).map((val) => val.message);
-            console.log(messages);
             return res.status(400).json({
                 success: false,
                 error: messages,
@@ -67,10 +65,19 @@ exports.getUser = async (req, res, next) => {
     const { username, locationPref } = req.body;
     try {
         const userdata = await User.find({username : { $in : [req.params.id]}});
-        return res.status(200).json({
-            success: true,
-            data: userdata
-        })
+        if (userdata.length < 1){
+            return res.status(500).json({
+                success: false,
+                error: "user does not exist"
+
+            })
+        } else {
+            return res.status(200).json({
+                success: true,
+                data: userdata
+            })
+        }
+        
     } catch (err) {
         return res.status(500).json({
             success: false,
@@ -83,11 +90,10 @@ exports.getUser = async (req, res, next) => {
 
 exports.deleteUser = async (req, res, next) => {
     try {
-        const userdata = await User.deleteOne({username : { $in : [req.params.id]}});
-        return res.status(200).json({
-            success: true,
-        })
-    } catch (err) {
+            return res.status(200).json({
+                success: true})
+        
+    }catch (err) {
         return res.status(500).json({
             success: false,
             error: "server error"
