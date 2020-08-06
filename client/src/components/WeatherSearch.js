@@ -11,12 +11,9 @@ import searchGlass from "./pngs/icons8-search-64.png";
 function WeatherSearch() {
     const [weatherdata, setweatherdata] = useState({});
     const [searchedcity, setsearchedcity] = useState("");
-    
-    const [object, setObject] = useState({username: "", locationPref: ""});
+    const [userInfo, setUserInfo] = useState({username: "", locationPref: "", success: true, error: ""});
 
     function search() {
-        console.log(object.username)
-        console.log(object.locationPref)
         const apikey = "ba9faead36419b05538747acf541515b";
         const city = searchedcity;
         const url = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=" + apikey;
@@ -24,6 +21,9 @@ function WeatherSearch() {
             .then(res => {
                 setweatherdata(res.data);
             })
+        
+        console.log(userInfo.success);
+        console.log(userInfo.error)
     }
 
 
@@ -33,23 +33,18 @@ function WeatherSearch() {
             headers: {
                 "Content-Type" : "application/json",
                 "Access-Control-Allow-Origin" : "*"
-            }
-            
+            }      
         }
-
-        console.log(object.username);
-        console.log(object.locationPref);
         var body = {
-
-            username : object.username,
-            locationPref : object.locationPref
+            username : userInfo.username,
+            locationPref : userInfo.locationPref
         }
-        try{
-            var res = await axios.post("/users",body,  config)
-        } catch (err) {
-            console.log("response = "+ res + " there was error")
-        }
-        
+            
+        await axios.post("/users",body,  config)
+        .then (res => {
+            setUserInfo({...userInfo, success: res.success})
+            setUserInfo({...userInfo, error: res.error})
+        })
         
     }
     
@@ -60,11 +55,11 @@ function WeatherSearch() {
     }
 
     function handleUsernameChange(input){
-        setObject({...object, username: input})
+        setUserInfo({...userInfo, username: input})
     }
 
     function handleLocationPrefChange(input){
-        setObject({...object, locationPref: input})
+        setUserInfo({...userInfo, locationPref: input})
     }
 
 
