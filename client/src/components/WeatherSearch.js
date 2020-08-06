@@ -12,10 +12,11 @@ function WeatherSearch() {
     const [weatherdata, setweatherdata] = useState({});
     const [searchedcity, setsearchedcity] = useState("");
     
-    //check when this is updated, its overwritting the whole thing not each field
-    var [object, setObject] = useState({username: "", locationPref: ""});
+    const [object, setObject] = useState({username: "", locationPref: ""});
 
     function search() {
+        console.log(object.username)
+        console.log(object.locationPref)
         const apikey = "ba9faead36419b05538747acf541515b";
         const city = searchedcity;
         const url = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=" + apikey;
@@ -24,6 +25,8 @@ function WeatherSearch() {
                 setweatherdata(res.data);
             })
     }
+
+
 
     async function saveprefs() {
         const config ={
@@ -34,13 +37,17 @@ function WeatherSearch() {
             
         }
 
+        console.log(object.username);
+        console.log(object.locationPref);
+        var body = {
+
+            username : object.username,
+            locationPref : object.locationPref
+        }
         try{
-            var res = await axios.post("/users",{
-                "username" : object.username,
-                "locationPref" : object.locationPref
-            },config)
+            var res = await axios.post("/users",body,  config)
         } catch (err) {
-            console.log("response = "+ res + "there was error")
+            console.log("response = "+ res + " there was error")
         }
         
         
@@ -50,6 +57,14 @@ function WeatherSearch() {
         if (event.key === 'Enter') {
           search();
         }
+    }
+
+    function handleUsernameChange(input){
+        setObject({...object, username: input})
+    }
+
+    function handleLocationPrefChange(input){
+        setObject({...object, locationPref: input})
     }
 
 
@@ -62,7 +77,7 @@ function WeatherSearch() {
     }
 
     return str.join(" ");
-}
+    }
 
 
 
@@ -184,7 +199,7 @@ function WeatherSearch() {
                         Weather App
                     </Typography>
                 </AppBar>
-                <Card className={classes.card} variant="filled">
+                <Card className={classes.card} >
                     <CardContent>
                         <TextField 
                             className = {classes.textfield}
@@ -199,7 +214,7 @@ function WeatherSearch() {
                           onKeyDown={handleKeyDown}
                         />
                         <IconButton  
-                            classname ={classes.searchButton}
+                            className ={classes.searchButton}
                             onClick={() => search()}
                             aria-label="Search Weather"      
                         > 
@@ -224,26 +239,12 @@ function WeatherSearch() {
                     <CardContent>
                     <form className={classes.SignInForm} noValidate autoComplete="off">
                         <TextField id="standard-basic" label="Username" 
-                                onChange= {event => {
-                                    const { value } = event.target;
-                                    setObject(prevState => {
-                                        let object = Object.assign({}, prevState.object);
-                                        object.username = value;
-                                        return {object};
-                                    })
-                                }}
+                                onChange={(event) => handleUsernameChange(event.target.value)} 
                             />
                         
                        
                         <TextField id="standard-basic" label="Home City"
-                            onChange= {event => {
-                                const { value } = event.target;
-                                setObject(prevState => {
-                                    let object = Object.assign({}, prevState.object);
-                                    object.locationPref = value;
-                                    return {object};
-                                })
-                            }}
+                            onChange={(event) => handleLocationPrefChange(event.target.value)} 
                         />
                         
                         
